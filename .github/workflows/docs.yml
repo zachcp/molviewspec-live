@@ -29,7 +29,7 @@ jobs:
         run: |
           python3 -m pip install jupyter
       - name: Build Docs
-        run: quarto render docs
+        run: just render-docs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
