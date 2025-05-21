@@ -1,0 +1,24 @@
+---
+title: "About"
+filters:
+  - molviewspec-live
+format: live-html
+---
+
+
+
+```{pyodide}
+1 + 1
+```
+
+
+```{.python .molviewspec-live}
+structure = (builder
+    .download(url="https://www.ebi.ac.uk/pdbe/entry-files/download/1cbs_updated.cif")
+    .parse(format="mmcif")
+    .model_structure()
+    .component()
+    .representation()
+    .color(color="blue")
+)
+```

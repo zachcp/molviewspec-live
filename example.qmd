@@ -1,0 +1,23 @@
+---
+title: "Molviewspec-live Example"
+filters:
+  - molviewspec-live
+---
+
+## Heading
+
+This filter adds formatting to heading text.
+
+
+
+
+```{.python .molviewspec-live}
+structure = (builder
+    .download(url="https://www.ebi.ac.uk/pdbe/entry-files/download/1cbs_updated.cif")
+    .parse(format="mmcif")
+    .model_structure()
+    .component()
+    .representation()
+    .color(color="blue")
+)
+```
