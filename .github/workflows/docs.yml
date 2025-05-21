@@ -29,11 +29,11 @@ jobs:
         run: |
           python3 -m pip install jupyter
       - name: Build Docs
-        run: quarto render
+        run: quarto render docs
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: _site
+          path: docs/_site
   deploy:
     name: Deploy
     environment:
