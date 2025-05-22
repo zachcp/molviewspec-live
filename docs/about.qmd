@@ -1,10 +1,9 @@
 ---
 title: "About"
+format: live-html
 filters:
   - molviewspec-live
-format: live-html
 ---
-
 
 
 ```{pyodide}

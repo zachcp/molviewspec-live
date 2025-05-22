@@ -1,3 +1,5 @@
 .quarto
 _site
 _extensions/molviewspec-live
+
+/.quarto/

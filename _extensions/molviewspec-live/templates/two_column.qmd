@@ -1,8 +1,8 @@
-::: {.grid}
+:::{.grid}
 
-::: {.g-col-6}
+:::{.g-col-6}
 
-```{pyodide}
+```{.pyodide}
 #| autorun: true
 #| edit: true
 #| output: false
@@ -24,7 +24,7 @@ mvsjData = builder.get_state()
 
 :::
 
-::: {.g-col-6}
+:::{.g-col-6}
 
 
 ```{ojs}
