@@ -23,10 +23,11 @@ function CodeBlock(el)
         local updatedmarkdown = apply_template("two_column.qmd", { content = content })
         print("Post sub markdown: " .. updatedmarkdown)
 
-        local parsed = pandoc.read(updatedmarkdown, "markdown")
+
         -- Return a RawBlock with QMD content
         -- return pandoc.RawBlock("markdown", updatedmarkdown)
         -- return pandoc.RawBlock("html", updatedmarkdown)
+        local parsed = pandoc.read(updatedmarkdown, "markdown")
         return parsed.blocks
     end
 
