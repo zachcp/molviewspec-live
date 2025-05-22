@@ -27,8 +27,9 @@ function CodeBlock(el)
         -- Return a RawBlock with QMD content
         -- return pandoc.RawBlock("markdown", updatedmarkdown)
         -- return pandoc.RawBlock("html", updatedmarkdown)
-        local parsed = pandoc.read(updatedmarkdown, "markdown")
-        return parsed.blocks
+        -- local parsed = pandoc.read(updatedmarkdown, "markdown")
+        -- return parsed.blocks
+        return quarto._quarto.utils.string_to_blocks(updatedmarkdown)
     end
 
     return el
