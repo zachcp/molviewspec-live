@@ -1,17 +1,15 @@
 ---
 title: "About"
-format: live-html
 filters:
   - molviewspec-live
 ---
 
 
-```{pyodide}
-1 + 1
-```
-
+## MolviewSpecLive Example 01
 
 ```{.python .molviewspec-live}
+from molviewspec import create_builder;
+builder = create_builder();
 structure = (builder
     .download(url="https://www.ebi.ac.uk/pdbe/entry-files/download/1cbs_updated.cif")
     .parse(format="mmcif")
@@ -20,4 +18,38 @@ structure = (builder
     .representation()
     .color(color="blue")
 )
+builder.get_state()
+```
+
+
+## MolviewSpecLive Example 01
+
+```{.python .molviewspec-live}
+from molviewspec import create_builder;
+builder = create_builder()
+structure = (builder
+    .download(url="https://www.ebi.ac.uk/pdbe/entry-files/download/1lap_updated.cif")
+    .parse(format="mmcif")
+    .model_structure()
+)
+
+# Reference a residue of interest
+residue = ComponentExpression(label_asym_id="A", label_seq_id=120)
+
+# Represent everything as cartoon & color the residue red
+whole = structure.component()
+(whole
+    .representation()
+    .color(color="red",
+    selector=ComponentExpression(label_asym_id="A", label_seq_id=120))
+)
+
+# label the residues with custom text & focus it
+(structure
+    .component(selector=residue)
+    .label(text="ALA 120 A: My Label")
+    .focus()
+)
+
+return builder.get_state()
 ```

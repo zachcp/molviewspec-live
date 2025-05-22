@@ -6,8 +6,7 @@ contributes:
   filters:
     - molviewspec-live.lua
   includes:
-    - file: app/main.js
-    - file: app/assets/package.json
+    - file: app/molviewspeclive.umd.js
     - file: app/assets/pyodide-lock.json
     - file: app/assets/pyodide.asm.js
     - file: app/assets/pyodide.asm.wasm
@@ -16,3 +15,6 @@ contributes:
     - file: app/assets/pyodide.mjs
     - file: app/assets/pyodide.mjs.map
     - file: app/assets/python_stdlib.zip
+    - file: assets/molstar.js
+    - file: assets/molstar.css
+    - file: assets/app.css

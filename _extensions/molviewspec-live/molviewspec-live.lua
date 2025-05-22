@@ -1,9 +1,26 @@
 local function loadHtmlDeps()
     quarto.doc.addHtmlDependency {
+        name = 'molstar',
+        version = 'v4.17.0',
+        scripts = { './assets/molstar.js' },
+        stylesheets = { './assets/molstar.css' },
+    }
+    quarto.doc.addHtmlDependency {
         name = 'molviewspec-live',
         version = 'v0.1.0',
         scripts = { './app/molviewspeclive.umd.js' },
+        stylesheets = { './assets/app.css' },
     }
+    quarto.doc.attach_to_dependency('molviewspec-live', './app/assets/python_stdlib.zip')
+    quarto.doc.attach_to_dependency('molviewspec-live', './app/assets/python_stdlib.zip')
+    quarto.doc.attach_to_dependency('molviewspec-live', './app/assets/pyodide-lock.json')
+    quarto.doc.attach_to_dependency('molviewspec-live', './app/assets/pyodide.asm.js')
+    quarto.doc.attach_to_dependency('molviewspec-live', './app/assets/pyodide.asm.wasm')
+    quarto.doc.attach_to_dependency('molviewspec-live', './app/assets/pyodide.js')
+    quarto.doc.attach_to_dependency('molviewspec-live', './app/assets/pyodide.js.map')
+    quarto.doc.attach_to_dependency('molviewspec-live', './app/assets/pyodide.mjs')
+    quarto.doc.attach_to_dependency('molviewspec-live', './app/assets/pyodide.mjs.map')
+    quarto.doc.attach_to_dependency('molviewspec-live', './app/assets/python_stdlib.zip')
 end
 
 -- Generate a unique ID for the molecule viewer container

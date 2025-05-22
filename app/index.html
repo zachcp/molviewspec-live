@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Pyodide Debugging</title>
+        <link rel="stylesheet" href="/src/styles.css" />
+        <!-- Load Molstar library -->
+        <script src="https://cdn.jsdelivr.net/npm/molstar@latest/build/viewer/molstar.js"></script>
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdn.jsdelivr.net/npm/molstar@latest/build/viewer/molstar.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+        <script type="module">
+            import { initApp } from "/src/main.mjs";
+            const app_div = document.querySelector("#app");
+            const init_code = `from molviewspec import create_builder
+import json
+
+builder = create_builder()
+structure = (builder
+  .download(url="https://www.ebi.ac.uk/pdbe/entry-files/download/1cbs_updated.cif")
+  .parse(format="mmcif")
+  .model_structure()
+  .component()
+  .representation()
+  .color(color="blue")
+)
+state = builder.get_state()
+print("Python state object:", state)
+json.dumps(state)
+`;
+            // Initialize app with null initial state to force code execution
+            initApp(app_div, null, init_code);
+        </script>
+    </body>
+</html>
