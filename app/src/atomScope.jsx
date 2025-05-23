@@ -36,7 +36,7 @@ function createAtomScope() {
           "./packages/typing_extensions-4.11.0-py3-none-any.whl",
           "./packages/pydantic_core-2.27.2-cp312-cp312-pyodide_2024_0_wasm32.whl",
           "./packages/pydantic-2.10.5-py3-none-any.whl",
-          "./packages/molviewspec-1.5.0-py3-none-any.whl",
+          "./packages/molviewspec-1.6.0-py3-none-any.whl",
         ];
 
         await Promise.all(
