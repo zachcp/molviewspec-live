@@ -8,6 +8,8 @@ website:
       - href: index.qmd
         text: Home
       - about.qmd
+      - href: https://zachcp.github.io/molviewspec-live/
+        text: GitHub
 
 format:
   html:
