@@ -22,7 +22,7 @@ Inclusion of interactive molviewspec-driven viz in webpages using the following 
       .representation()
       .color(color="blue")
   )
-  builder.get_state()
+  builder.get_state().dumps()
 ```
 
 
