@@ -12,7 +12,7 @@ This filter adds formatting to heading text.
 
 ## Javascript
 
-```{.js .molviewspec-live}
+```{.js .molviewspec-live render=javascript}
 // Create a builder for molecular visualization
 const builder = molstar.PluginExtensions.mvs.MVSData.createBuilder();
 
@@ -44,14 +44,16 @@ const mvsData = builder.getStat
 
 
 ```{.python .molviewspec-live}
-import molviewspec as mvs
-builder = mvs.create_builder()
+from molviewspec import create_builder;
+builder = create_builder();
 structure = (builder
-    .download(url="https://www.ebi.ac.uk/pdbe/entry-files/download/1cbs_updated.cif")
+    .download(
+        url="https://www.ebi.ac.uk/pdbe/entry-files/download/1cbs_updated.cif")
     .parse(format="mmcif")
     .model_structure()
     .component()
     .representation()
     .color(color="blue")
 )
+builder.get_state().dumps()
 ```

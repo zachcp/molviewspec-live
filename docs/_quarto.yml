@@ -9,6 +9,8 @@ website:
         text: Home
       - href: about.qmd
         text: Examples
+      - href: examples_js.qmd
+        text: JS Examples
     right:
       - icon: github
         href: https://github.com/zachcp/molviewspec-live
