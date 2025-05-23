@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useAtom } from "jotai";
+import { useAtomScope } from "../../atomScope";
 
 const molstarParams = {
   allowMajorPerformanceCaveat: true,
@@ -37,9 +38,10 @@ const molstarParams = {
   volumeStreamingDisabled: false,
 };
 
-export function MolStar({ atomScope }) {
+export function MolStar() {
   const containerRef = useRef(null);
   const instanceRef = useRef(null);
+  const atomScope = useAtomScope();
   const [molViewSpecJson] = useAtom(atomScope.molViewSpecJsonAtom);
 
   // Initialize the component
@@ -70,9 +72,14 @@ export function MolStar({ atomScope }) {
   // Update when molViewSpecJson changes
   useEffect(() => {
     if (instanceRef.current && molViewSpecJson) {
-      instanceRef.current.loadMvsData(molViewSpecJson, "mvsj", {
-        replaceExisting: true,
-      });
+      console.log("MolStar: Loading new data", typeof molViewSpecJson, molViewSpecJson);
+      try {
+        instanceRef.current.loadMvsData(molViewSpecJson, "mvsj", {
+          replaceExisting: true,
+        });
+      } catch (error) {
+        console.error("MolStar: Error loading data:", error);
+      }
     }
   }, [molViewSpecJson]);
 

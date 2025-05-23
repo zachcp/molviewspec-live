@@ -1,8 +1,8 @@
 // src/app/src/atomScope.jsx
 // This file is maintained for backward compatibility
+import React, { createContext, useContext } from "react";
 import { usePythonAtomScope } from "./components/python/atomScope.jsx";
 import { useJSAtomScope } from "./components/js/atomScope.jsx";
-import { useContext, createContext } from "react";
 
 // Create a global context that will be used to determine which implementation to use
 const ImplementationContext = createContext("python"); // Default to python
@@ -19,6 +19,15 @@ export function useAtomScope() {
     return usePythonAtomScope();
   }
 }
+
+// Provider component to specify which implementation to use
+export const ImplementationProvider = ({ implementation = "python", children }) => {
+  return (
+    <ImplementationContext.Provider value={implementation}>
+      {children}
+    </ImplementationContext.Provider>
+  );
+};
 
 // Re-export the provider for backward compatibility
 export { PythonMolViewSpecApp as MolViewSpecApp } from "./components/python/atomScope.jsx";

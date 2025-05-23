@@ -49,7 +49,7 @@ export function CodeMirrorEditor({ initialCode = "" }) {
         />
       </div>
       <div className="visualization-container">
-        <MolStar atomScope={atomScope} />
+        <MolStar />
       </div>
     </div>
   );

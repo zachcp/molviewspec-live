@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { keymap } from "@codemirror/view";
@@ -9,18 +9,29 @@ import { MolStar } from "../common/MolStar.jsx";
 export function CodeMirrorEditor({ initialCode = "" }) {
   const atomScope = useJSAtomScope();
   const [code, setCode] = useAtom(atomScope.codeAtom);
+  const [molstarReady] = useAtom(atomScope.molstarReadyAtom);
   const [, executeJsCode] = useAtom(atomScope.executeJsCodeAtom);
+  const [, initializeMolstar] = useAtom(atomScope.initializeMolstarAtom);
+  const [initialized, setInitialized] = useState(false);
 
-  // Initialize code
+  // Initialize code and check if molstar is ready
   useEffect(() => {
     if (initialCode && !code) {
       setCode(initialCode);
     }
-    // Initial code execution
-    if (code) {
+    
+    // Initialize and check if molstar is available
+    initializeMolstar().then(() => {
+      setInitialized(true);
+    });
+  }, []);
+
+  // Run code once molstar is confirmed ready and code is initialized
+  useEffect(() => {
+    if (molstarReady && code && initialized) {
       executeJsCode();
     }
-  }, []);
+  }, [molstarReady, initialized]);
 
   // Alt+Enter keyboard shortcut
   const codeExecutionKeymap = keymap.of([
@@ -43,7 +54,8 @@ export function CodeMirrorEditor({ initialCode = "" }) {
         />
       </div>
       <div className="visualization-container">
-        <MolStar atomScope={atomScope} />
+        {!molstarReady && <div className="loading">Loading Molstar...</div>}
+        <MolStar />
       </div>
     </div>
   );

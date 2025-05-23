@@ -4,7 +4,7 @@ import { CodeMirrorEditor as PythonEditor } from "./components/python/CodeMirror
 import { PythonMolViewSpecApp } from "./components/python/atomScope.jsx";
 import { CodeMirrorEditor as JSEditor } from "./components/js/CodeMirrorEditor.jsx";
 import { JSMolViewSpecApp } from "./components/js/atomScope.jsx";
-import { AtomScopeProvider } from "./components/common/atomScopeContext.jsx";
+import { ImplementationProvider } from "./atomScope.jsx";
 
 export function appInit(container, initialState, initialCode, mode = "python") {
   if (!container) return;
@@ -14,17 +14,25 @@ export function appInit(container, initialState, initialCode, mode = "python") {
   if (mode === "python") {
     root.render(
       createElement(
-        PythonMolViewSpecApp,
-        { initialCode: initialCode },
-        createElement(PythonEditor, { initialCode: initialCode }),
+        ImplementationProvider,
+        { implementation: "python" },
+        createElement(
+          PythonMolViewSpecApp,
+          { initialCode: initialCode },
+          createElement(PythonEditor, { initialCode: initialCode }),
+        ),
       ),
     );
   } else if (mode === "js") {
     root.render(
       createElement(
-        JSMolViewSpecApp,
-        { initialCode: initialCode },
-        createElement(JSEditor, { initialCode: initialCode }),
+        ImplementationProvider,
+        { implementation: "js" },
+        createElement(
+          JSMolViewSpecApp,
+          { initialCode: initialCode },
+          createElement(JSEditor, { initialCode: initialCode }),
+        ),
       ),
     );
   }
