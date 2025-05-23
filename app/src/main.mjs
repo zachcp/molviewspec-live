@@ -1,28 +1,26 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
+// main.mjs
+import { createElement } from "react";
+import { createRoot } from "react-dom/client";
 import { CodeMirrorEditor } from "./app.jsx";
+import { MolViewSpecApp } from "./atomScope.jsx";
 
-/**
- * Initialize the MolViewSpec application
- * @param {HTMLElement} targetDiv - The target DOM element to render the app into
- * @param {Object|null} initialState - Optional initial state for the application
- * @param {string|null} initialCode - Optional initial Python code
- * @returns {Object} The ReactDOM root instance
- */
-export function appInit(targetDiv, initialState = null, initialCode = null) {
-  if (!targetDiv) {
-    throw new Error("targetDiv is required");
-  }
+export function appInit(container, initialState, initialCode) {
+  if (!container) return;
 
-  const root = ReactDOM.createRoot(targetDiv);
+  const root = createRoot(container);
+
+  // Replace JSX with createElement calls
   root.render(
-    React.createElement(CodeMirrorEditor, {
-      initialState: initialState,
-      initialCode: initialCode,
-    }),
+    createElement(
+      MolViewSpecApp,
+      { initialCode: initialCode },
+      createElement(
+        "div",
+        { className: "app-container" },
+        createElement(CodeMirrorEditor, { initialCode: initialCode }),
+      ),
+    ),
   );
-
-  return root;
 }
 
 // Make sure both named and default exports are available

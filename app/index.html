@@ -16,9 +16,12 @@
     </head>
     <body>
         <div id="app"></div>
+        <br />
+        <div id="app2"></div>
         <script type="module">
-            import { initApp } from "/src/main.mjs";
+            import { appInit } from "/src/main.mjs";
             const app_div = document.querySelector("#app");
+            const app_div2 = document.querySelector("#app2");
             const init_code = `from molviewspec import create_builder
 import json
 
@@ -36,7 +39,8 @@ print("Python state object:", state)
 json.dumps(state)
 `;
             // Initialize app with null initial state to force code execution
-            initApp(app_div, null, init_code);
+            appInit(app_div, null, init_code);
+            appInit(app_div2, null, init_code);
         </script>
     </body>
 </html>

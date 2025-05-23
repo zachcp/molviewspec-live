@@ -1,55 +1,11 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, createContext, useContext } from "react";
+import { Provider as JotaiProvider } from "jotai";
 import CodeMirror from "@uiw/react-codemirror";
 import { python } from "@codemirror/lang-python";
 import { keymap } from "@codemirror/view";
 import { atom, useAtom } from "jotai";
 import { loadPyodide } from "pyodide";
-
-// ========== Atom Definitions ========================================
-const codeAtom = atom("");
-const molViewSpecJsonAtom = atom(null);
-const pyodideReadyAtom = atom(false);
-
-// Atom to handle Pyodide initialization
-const initializePyodideAtom = atom(null, async (_, set) => {
-  try {
-    console.log("Loading Pyodide...");
-    window.pyodide = await loadPyodide();
-
-    const packages = [
-      "./packages/micropip-0.9.0-py3-none-any.whl",
-      "./packages/annotated_types-0.6.0-py3-none-any.whl",
-      "./packages/typing_extensions-4.11.0-py3-none-any.whl",
-      "./packages/pydantic_core-2.27.2-cp312-cp312-pyodide_2024_0_wasm32.whl",
-      "./packages/pydantic-2.10.5-py3-none-any.whl",
-      "./packages/molviewspec-1.5.0-py3-none-any.whl",
-    ];
-
-    await Promise.all(packages.map((pkg) => window.pyodide.loadPackage(pkg)));
-    console.log("Pyodide loaded successfully!");
-    set(pyodideReadyAtom, true);
-    return true;
-  } catch (error) {
-    console.error("Error initializing Pyodide:", error);
-    return false;
-  }
-});
-
-// Derived atom for executing Python code
-const executePyCodeAtom = atom(
-  (get) => get(codeAtom),
-  async (get, set) => {
-    if (!get(pyodideReadyAtom)) return;
-
-    try {
-      const code = get(codeAtom);
-      const result = await window.pyodide.runPythonAsync(code);
-      set(molViewSpecJsonAtom, JSON.parse(result));
-    } catch (error) {
-      console.error("Error executing Python code:", error);
-    }
-  },
-);
+import { useAtomScope } from "./atomScope.jsx";
 
 // ========== Params ==================================================
 // Molstar viewer configuration parameters
@@ -94,7 +50,9 @@ const molstarParams = {
 export function MolStar() {
   const containerRef = useRef(null);
   const instanceRef = useRef(null);
-  const [molViewSpecJson] = useAtom(molViewSpecJsonAtom);
+  // const [molViewSpecJson] = useAtom(molViewSpecJsonAtom);
+  const atomScope = useAtomScope();
+  const [molViewSpecJson] = useAtom(atomScope.molViewSpecJsonAtom);
 
   // Initialize the component
   useEffect(() => {
@@ -138,10 +96,15 @@ export function MolStar() {
 }
 
 export function CodeMirrorEditor({ initialCode = "" }) {
-  const [code, setCode] = useAtom(codeAtom);
-  const [pyodideReady] = useAtom(pyodideReadyAtom);
-  const [, executePyCode] = useAtom(executePyCodeAtom);
-  const [, initPyodide] = useAtom(initializePyodideAtom);
+  // const [code, setCode] = useAtom(codeAtom);
+  // const [pyodideReady] = useAtom(pyodideReadyAtom);
+  // const [, executePyCode] = useAtom(executePyCodeAtom);
+  // const [, initPyodide] = useAtom(initializePyodideAtom);
+  const atomScope = useAtomScope();
+  const [code, setCode] = useAtom(atomScope.codeAtom);
+  const [pyodideReady] = useAtom(atomScope.pyodideReadyAtom);
+  const [, executePyCode] = useAtom(atomScope.executePyCodeAtom);
+  const [, initPyodide] = useAtom(atomScope.initializePyodideAtom);
 
   // Initialize code and Pyodide
   useEffect(() => {
