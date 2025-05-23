@@ -80,7 +80,6 @@ function createAtomScope() {
 
 // Provider component that creates a new atom scope
 export function MolViewSpecApp({ initialCode = "", children }) {
-  // Create a fresh set of atoms for this instance
   const atomScope = useMemo(() => createAtomScope(), []);
 
   return (
