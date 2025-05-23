@@ -29,29 +29,38 @@ function createJSAtomScope() {
         // Poll until molstar is available
         return new Promise((resolve) => {
           const checkInterval = setInterval(() => {
-            if (window.molstar && 
-                window.molstar.PluginExtensions && 
-                window.molstar.PluginExtensions.mvs) {
+            if (
+              window.molstar &&
+              window.molstar.PluginExtensions &&
+              window.molstar.PluginExtensions.mvs
+            ) {
               clearInterval(checkInterval);
               set(molstarReadyAtom, true);
               console.log("Molstar MVS extension loaded successfully!");
               resolve(true);
             }
           }, 100);
-          
+
           // Set a timeout to avoid infinite polling
           setTimeout(() => {
             clearInterval(checkInterval);
-            if (!window.molstar || !window.molstar.PluginExtensions || !window.molstar.PluginExtensions.mvs) {
+            if (
+              !window.molstar ||
+              !window.molstar.PluginExtensions ||
+              !window.molstar.PluginExtensions.mvs
+            ) {
               console.error("Timed out waiting for Molstar MVS extension");
               resolve(false);
             }
           }, 10000); // 10 second timeout
         });
       }
-      
+
       // Check if MVS extension is available
-      if (window.molstar.PluginExtensions && window.molstar.PluginExtensions.mvs) {
+      if (
+        window.molstar.PluginExtensions &&
+        window.molstar.PluginExtensions.mvs
+      ) {
         set(molstarReadyAtom, true);
         console.log("Molstar MVS extension loaded successfully!");
         return true;
@@ -81,7 +90,7 @@ function createJSAtomScope() {
       try {
         const code = get(codeAtom);
         console.log("Executing JS code:", code);
-        
+
         // Execute the JS code in a controlled environment
         const evalFunction = new Function(`
           try {
@@ -89,10 +98,12 @@ function createJSAtomScope() {
             if (!window.molstar || !window.molstar.PluginExtensions || !window.molstar.PluginExtensions.mvs) {
               throw new Error("Molstar MVS extension is not available");
             }
-            
+
+
+
             // Execute the user code
             ${code}
-            
+
             // Return the MVS data directly
             return mvsData;
           } catch (error) {
@@ -100,12 +111,12 @@ function createJSAtomScope() {
             throw error;
           }
         `);
-        
+
         try {
           console.log("Calling evalFunction");
           const result = evalFunction();
           console.log("Execution result:", result);
-            
+
           if (result) {
             // Simply use the result directly
             console.log("Using result directly");
@@ -119,7 +130,7 @@ function createJSAtomScope() {
       } catch (error) {
         console.error("Error setting up JS execution:", error);
       }
-    }
+    },
   );
 
   return {
