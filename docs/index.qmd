@@ -2,6 +2,18 @@
 title: "molviewspec-live"
 ---
 
-This is a Quarto website.
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+This website is an exeriment that lets us create interactive molecular visualziations in the browser. See [examples](./about.html).
+
+## Technologies
+
+
+- Python Evaluation:
+  - [pyodide](https://pyodide.org/) - Python scientific stack in the browser via WebAssembly.
+  - [molviewspec](https://github.com/molstar/molviewspec) - Domain-specific language for molecular visualization specifications.
+
+- Website:
+  - [mol*](https://molstar.org/) - Open-source toolkit for visualization of molecular structures.
+  - [quarto](https://quarto.org/) - Scientific and technical publishing system built on Pandoc.
+  - [react](https://reactjs.org/) - JavaScript library for building user interfaces.
+  - [jotai](https://jotai.org/) - Primitive and flexible state management for React.
