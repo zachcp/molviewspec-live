@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useAtom } from "jotai";
-import { useAtomScope } from "../../atomScope";
+import { useAtomScope } from "../../main.mjs";
 
 const molstarParams = {
   allowMajorPerformanceCaveat: true,

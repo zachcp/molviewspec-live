@@ -1,11 +1,49 @@
 import { createElement } from "react";
 import { createRoot } from "react-dom/client";
-import { CodeMirrorEditor as PythonEditor } from "./components/python/CodeMirrorEditor.jsx";
-import { PythonMolViewSpecApp } from "./components/python/atomScope.jsx";
-import { CodeMirrorEditor as JSEditor } from "./components/js/CodeMirrorEditor.jsx";
-import { JSMolViewSpecApp } from "./components/js/atomScope.jsx";
-import { ImplementationProvider } from "./atomScope.jsx";
 
+// Import all necessary components directly
+import { PythonMolViewSpecApp } from "./components/python/atomScope.jsx";
+import { JSMolViewSpecApp } from "./components/js/atomScope.jsx";
+import { CodeMirrorEditor as PythonEditor } from "./components/python/CodeMirrorEditor.jsx";
+import { CodeMirrorEditor as JSEditor } from "./components/js/CodeMirrorEditor.jsx";
+import { MolStar } from "./components/common/MolStar.jsx";
+
+// Import implementation context provider
+import { createContext, useContext } from "react";
+
+// Create a global context that will be used to determine which implementation to use
+const ImplementationContext = createContext("python"); // Default to python
+
+// Implementation Provider component to specify which implementation to use
+export const ImplementationProvider = ({ implementation = "python", children }) => {
+  return (
+    <ImplementationContext.Provider value={implementation}>
+      {children}
+    </ImplementationContext.Provider>
+  );
+};
+
+// Export the hook to access the current atom scope
+export function useAtomScope() {
+  const implementation = useContext(ImplementationContext);
+  
+  // Determine which implementation to use
+  if (implementation === "js") {
+    const { useJSAtomScope } = require("./components/js/atomScope.jsx");
+    return useJSAtomScope();
+  } else {
+    // Default to Python
+    const { usePythonAtomScope } = require("./components/python/atomScope.jsx");
+    return usePythonAtomScope();
+  }
+}
+
+// Re-export common components for backward compatibility
+export { PythonEditor as CodeMirrorEditor };
+export { MolStar };
+export { PythonMolViewSpecApp as MolViewSpecApp };
+
+// Main application initialization function
 export function appInit(container, initialState, initialCode, mode = "python") {
   if (!container) return;
 
