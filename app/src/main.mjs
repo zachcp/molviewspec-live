@@ -8,32 +8,35 @@ import { CodeMirrorEditor as PythonEditor } from "./components/python/CodeMirror
 import { CodeMirrorEditor as JSEditor } from "./components/js/CodeMirrorEditor.jsx";
 import { MolStar } from "./components/common/MolStar.jsx";
 
-// Import implementation context provider
-import { createContext, useContext } from "react";
-
-// Create a global context that will be used to determine which implementation to use
-const ImplementationContext = createContext("python"); // Default to python
+// Create a React context in a separate file to avoid JSX in .mjs
+import React from "react";
+const ImplementationContext = React.createContext("python"); // Default to python
 
 // Implementation Provider component to specify which implementation to use
-export const ImplementationProvider = ({ implementation = "python", children }) => {
-  return (
-    <ImplementationContext.Provider value={implementation}>
-      {children}
-    </ImplementationContext.Provider>
+export const ImplementationProvider = function(props) {
+  const implementation = props.implementation || "python";
+  const children = props.children;
+  
+  return createElement(
+    ImplementationContext.Provider,
+    { value: implementation },
+    children
   );
 };
 
+// Import the atomScope hooks directly
+import { useJSAtomScope } from "./components/js/atomScope.jsx";
+import { usePythonAtomScope } from "./components/python/atomScope.jsx";
+
 // Export the hook to access the current atom scope
 export function useAtomScope() {
-  const implementation = useContext(ImplementationContext);
+  const implementation = React.useContext(ImplementationContext);
   
   // Determine which implementation to use
   if (implementation === "js") {
-    const { useJSAtomScope } = require("./components/js/atomScope.jsx");
     return useJSAtomScope();
   } else {
     // Default to Python
-    const { usePythonAtomScope } = require("./components/python/atomScope.jsx");
     return usePythonAtomScope();
   }
 }

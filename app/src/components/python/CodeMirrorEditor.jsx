@@ -4,7 +4,7 @@ import { python } from "@codemirror/lang-python";
 import { keymap } from "@codemirror/view";
 import { useAtom } from "jotai";
 import { usePythonAtomScope } from "./atomScope.jsx";
-import { MolStar } from "../common/MolStar.jsx";
+import { MolStar } from "../../main.mjs";
 
 export function CodeMirrorEditor({ initialCode = "" }) {
   const atomScope = usePythonAtomScope();
