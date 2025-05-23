@@ -431,6 +431,6 @@ snapshot = builder.get_snapshot(
 
 mvs.States(
     snapshots=[snapshot], metadata=mvs.GlobalMetadata(description="1tqn + Volume Server")
-).to_dict()
+).dumps()
 
 ```
