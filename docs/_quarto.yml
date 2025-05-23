@@ -7,9 +7,11 @@ website:
     left:
       - href: index.qmd
         text: Home
-      - about.qmd
-      - href: https://zachcp.github.io/molviewspec-live/
-        text: GitHub
+      - href: about.qmd
+        text: Examples
+    right:
+      - icon: github
+        href: https://github.com/zachcp/molviewspec-live
 
 format:
   html:
