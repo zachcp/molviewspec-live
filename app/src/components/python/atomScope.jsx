@@ -1,23 +1,22 @@
-// src/app/src/atomScope.jsx
 import React, { createContext, useContext, useMemo } from "react";
 import { Provider as JotaiProvider } from "jotai";
 import { atom } from "jotai";
 import { loadPyodide } from "pyodide";
 
 // Create a context to pass the atom scope
-const AtomScopeContext = createContext(null);
+const PythonAtomScopeContext = createContext(null);
 
 // Hook to access the current atom scope
-export function useAtomScope() {
-  const scope = useContext(AtomScopeContext);
+export function usePythonAtomScope() {
+  const scope = useContext(PythonAtomScopeContext);
   if (!scope) {
-    throw new Error("useAtomScope must be used within an AtomScopeProvider");
+    throw new Error("usePythonAtomScope must be used within a PythonAtomScopeProvider");
   }
   return scope;
 }
 
 // Factory function to create a fresh set of atoms
-function createAtomScope() {
+function createPythonAtomScope() {
   const codeAtom = atom("");
   const molViewSpecJsonAtom = atom(null);
   const pyodideReadyAtom = atom(false);
@@ -79,14 +78,14 @@ function createAtomScope() {
 }
 
 // Provider component that creates a new atom scope
-export function MolViewSpecApp({ initialCode = "", children }) {
-  const atomScope = useMemo(() => createAtomScope(), []);
+export function PythonMolViewSpecApp({ initialCode = "", children }) {
+  const atomScope = useMemo(() => createPythonAtomScope(), []);
 
   return (
     <JotaiProvider>
-      <AtomScopeContext.Provider value={atomScope}>
+      <PythonAtomScopeContext.Provider value={atomScope}>
         {children}
-      </AtomScopeContext.Provider>
+      </PythonAtomScopeContext.Provider>
     </JotaiProvider>
   );
 }
