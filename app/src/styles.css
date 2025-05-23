@@ -1,0 +1,65 @@
+.app-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    max-width: 1600px;
+    min-width: 800px;
+    margin: 0 auto;
+}
+
+@media (min-width: 800px) {
+    .app-container {
+        flex-direction: row;
+    }
+    .editor-container,
+    .visualization-container {
+        flex: 1;
+        border: 1px solid #ddd;
+        width: 100%;
+        aspect-ratio: 1.3 / 1;
+    }
+}
+
+.editor-container {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    text-align: left;
+}
+
+.visualization-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 400px; */
+}
+
+.cm-editor {
+    border: 1px solid #ddd;
+    font-family: "Monaco", "Menlo", "Ubuntu Mono", "Consolas", monospace;
+    font-size: 15px;
+    overflow: hidden;
+    width: 100%;
+    aspect-ratio: 1.3 /1;
+}
+
+
+/* MolStar container */
+.molstar-container {
+    border-radius: 4px;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.molstar {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+    position: relative;
+}

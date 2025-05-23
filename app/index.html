@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Pyodide Debugging</title>
+        <link rel="stylesheet" href="/src/styles.css" />
+        <!-- Load Molstar library -->
+        <script src="https://cdn.jsdelivr.net/npm/molstar@latest/build/viewer/molstar.js"></script>
+        <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdn.jsdelivr.net/npm/molstar@latest/build/viewer/molstar.css"
+        />
+    </head>
+    <body>
+        <div id="app"></div>
+        <br />
+        <div id="app2"></div>
+        <script type="module">
+            import { appInit } from "/src/main.mjs";
+            const app_div = document.querySelector("#app");
+            const app_div2 = document.querySelector("#app2");
+            const init_code = `from molviewspec import create_builder
+import json
+
+builder = create_builder()
+structure = (builder
+  .download(url="https://www.ebi.ac.uk/pdbe/entry-files/download/1cbs_updated.cif")
+  .parse(format="mmcif")
+  .model_structure()
+  .component()
+  .representation()
+  .color(color="blue")
+)
+state = builder.get_state()
+print("Python state object:", state)
+json.dumps(state)
+`;
+            const init_code2 = `from molviewspec import create_builder, ComponentExpression;
+
+builder = create_builder()
+structure = (builder
+    .download(url="https://www.ebi.ac.uk/pdbe/entry-files/download/1lap_updated.cif")
+    .parse(format="mmcif")
+    .model_structure()
+)
+
+# Reference a residue of interest
+residue = ComponentExpression(label_asym_id="A", label_seq_id=120)
+
+# Represent everything as cartoon & color the residue red
+whole = structure.component()
+(whole
+    .representation()
+    .color(color="red",
+    selector=ComponentExpression(label_asym_id="A", label_seq_id=120))
+)
+
+# label the residues with custom text & focus it
+(structure
+    .component(selector=residue)
+    .label(text="ALA 120 A: My Label")
+    .focus()
+)
+
+builder.get_state()
+`;
+            // Initialize app with null initial state to force code execution
+            appInit(app_div, null, init_code);
+            appInit(app_div2, null, init_code2);
+        </script>
+    </body>
+</html>
