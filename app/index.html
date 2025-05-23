@@ -38,9 +38,38 @@ state = builder.get_state()
 print("Python state object:", state)
 json.dumps(state)
 `;
+            const init_code2 = `from molviewspec import create_builder, ComponentExpression;
+
+builder = create_builder()
+structure = (builder
+    .download(url="https://www.ebi.ac.uk/pdbe/entry-files/download/1lap_updated.cif")
+    .parse(format="mmcif")
+    .model_structure()
+)
+
+# Reference a residue of interest
+residue = ComponentExpression(label_asym_id="A", label_seq_id=120)
+
+# Represent everything as cartoon & color the residue red
+whole = structure.component()
+(whole
+    .representation()
+    .color(color="red",
+    selector=ComponentExpression(label_asym_id="A", label_seq_id=120))
+)
+
+# label the residues with custom text & focus it
+(structure
+    .component(selector=residue)
+    .label(text="ALA 120 A: My Label")
+    .focus()
+)
+
+builder.get_state()
+`;
             // Initialize app with null initial state to force code execution
             appInit(app_div, null, init_code);
-            appInit(app_div2, null, init_code);
+            appInit(app_div2, null, init_code2);
         </script>
     </body>
 </html>

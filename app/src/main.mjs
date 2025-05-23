@@ -1,4 +1,3 @@
-// main.mjs
 import { createElement } from "react";
 import { createRoot } from "react-dom/client";
 import { CodeMirrorEditor } from "./app.jsx";
@@ -9,19 +8,14 @@ export function appInit(container, initialState, initialCode) {
 
   const root = createRoot(container);
 
-  // Replace JSX with createElement calls
+  // Simplified render - removed the extra div
   root.render(
     createElement(
       MolViewSpecApp,
       { initialCode: initialCode },
-      createElement(
-        "div",
-        { className: "app-container" },
-        createElement(CodeMirrorEditor, { initialCode: initialCode }),
-      ),
+      createElement(CodeMirrorEditor, { initialCode: initialCode }),
     ),
   );
 }
 
-// Make sure both named and default exports are available
 export default appInit;

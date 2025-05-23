@@ -96,10 +96,6 @@ export function MolStar() {
 }
 
 export function CodeMirrorEditor({ initialCode = "" }) {
-  // const [code, setCode] = useAtom(codeAtom);
-  // const [pyodideReady] = useAtom(pyodideReadyAtom);
-  // const [, executePyCode] = useAtom(executePyCodeAtom);
-  // const [, initPyodide] = useAtom(initializePyodideAtom);
   const atomScope = useAtomScope();
   const [code, setCode] = useAtom(atomScope.codeAtom);
   const [pyodideReady] = useAtom(atomScope.pyodideReadyAtom);
@@ -137,7 +133,10 @@ export function CodeMirrorEditor({ initialCode = "" }) {
       <div className="editor-container">
         <CodeMirror
           value={code}
-          // height="300px"
+          // const MAX_LINES = 18;
+          // const LINE_HEIGHT = 21; // Approximate line height in pixels
+          // const maxHeight = `${MAX_LINES * LINE_HEIGHT}px`;
+          // style={ maxHeight: 381, overflow: "auto" }
           extensions={[python(), codeExecutionKeymap]}
           onChange={setCode}
         />

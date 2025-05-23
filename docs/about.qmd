@@ -25,7 +25,7 @@ builder.get_state()
 ## MolviewSpecLive Example 01
 
 ```{.python .molviewspec-live}
-from molviewspec import create_builder;
+from molviewspec import create_builder, ComponentExpression;
 builder = create_builder()
 structure = (builder
     .download(url="https://www.ebi.ac.uk/pdbe/entry-files/download/1lap_updated.cif")
@@ -51,5 +51,5 @@ whole = structure.component()
     .focus()
 )
 
-return builder.get_state()
+builder.get_state()
 ```
