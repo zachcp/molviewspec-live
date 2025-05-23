@@ -5,8 +5,29 @@ title: "molviewspec-live"
 
 This website is an exeriment that lets us create interactive molecular visualziations in the browser. See [examples](./about.html).
 
-## Technologies
+## Goal
 
+Inclusion of interactive molviewspec-driven viz in webpages using the following example Quarto syntax:
+
+```markdown
+  ```{.python .molviewspec-live}
+  from molviewspec import create_builder;
+  builder = create_builder();
+  structure = (builder
+      .download(
+          url="https://www.ebi.ac.uk/pdbe/entry-files/download/1cbs_updated.cif")
+      .parse(format="mmcif")
+      .model_structure()
+      .component()
+      .representation()
+      .color(color="blue")
+  )
+  builder.get_state()
+```
+
+
+
+## Technologies
 
 - Python Evaluation:
   - [pyodide](https://pyodide.org/) - Python scientific stack in the browser via WebAssembly.
