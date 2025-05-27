@@ -29,6 +29,7 @@
     "@uiw/react-codemirror": "^4.23.12",
     "jotai": "^2.12.4",
     "monaco-editor": "^0.52.2",
+    "monaco-editor-auto-typings": "^0.4.6",
     "pyodide": "^0.27.6",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

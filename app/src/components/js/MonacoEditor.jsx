@@ -3,6 +3,10 @@ import Editor from "@monaco-editor/react";
 import { useAtom } from "jotai";
 import { useJSAtomScope } from "./atomScope.jsx";
 import { MolStar } from "../../main.mjs";
+import { AutoTypings, LocalStorageCache } from "monaco-editor-auto-typings";
+import * as monaco from "monaco-editor";
+import { EXAMPLES, COLORS, PDB_URLS } from "../../utils/molstar-helpers.js";
+import { MONACO_CONFIG } from "../../config/monaco-config.js";
 
 export function MonacoEditor({ initialCode = "" }) {
   const atomScope = useJSAtomScope();
@@ -37,11 +41,86 @@ export function MonacoEditor({ initialCode = "" }) {
   }
 
   // Handle editor mount
-  function handleEditorDidMount(editor, monaco) {
+  async function handleEditorDidMount(editor, monacoInstance) {
     // Add Alt+Enter keyboard shortcut
-    editor.addCommand(monaco.KeyMod.Alt | monaco.KeyCode.Enter, () => {
+    editor.addCommand(monacoInstance.KeyMod.Alt | monacoInstance.KeyCode.Enter, () => {
       executeJsCode();
     });
+
+    // Set up TypeScript language defaults
+    monacoInstance.languages.typescript.javascriptDefaults.setCompilerOptions({
+      target: monacoInstance.languages.typescript.ScriptTarget[MONACO_CONFIG.compilerOptions.target],
+      allowNonTsExtensions: MONACO_CONFIG.compilerOptions.allowNonTsExtensions,
+      moduleResolution: monacoInstance.languages.typescript.ModuleResolutionKind[MONACO_CONFIG.compilerOptions.moduleResolution],
+      module: monacoInstance.languages.typescript.ModuleKind[MONACO_CONFIG.compilerOptions.module],
+      noEmit: MONACO_CONFIG.compilerOptions.noEmit,
+      allowSyntheticDefaultImports: MONACO_CONFIG.compilerOptions.allowSyntheticDefaultImports,
+      typeRoots: MONACO_CONFIG.compilerOptions.typeRoots,
+    });
+
+    // Add Molstar type definitions to Monaco
+    monacoInstance.languages.typescript.javascriptDefaults.addExtraLib(
+      MONACO_CONFIG.molstarTypeDefs,
+      'molstar-mvs.d.ts'
+    );
+
+    // Register code snippets for Molstar MVS
+    monacoInstance.languages.registerCompletionItemProvider('typescript', {
+      provideCompletionItems: (model, position) => {
+        const word = model.getWordUntilPosition(position);
+        const range = {
+          startLineNumber: position.lineNumber,
+          endLineNumber: position.lineNumber,
+          startColumn: word.startColumn,
+          endColumn: word.endColumn
+        };
+
+        return {
+          suggestions: MONACO_CONFIG.snippets.map(snippet => ({
+            label: snippet.label,
+            kind: monacoInstance.languages.CompletionItemKind[snippet.kind],
+            insertText: snippet.insertText,
+            insertTextRules: monacoInstance.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+            documentation: snippet.documentation,
+            range: range
+          }))
+        };
+      }
+    });
+
+    // Register hover provider for better documentation
+    monacoInstance.languages.registerHoverProvider('typescript', {
+      provideHover: (model, position) => {
+        const word = model.getWordAtPosition(position);
+        if (!word) return;
+
+        if (MONACO_CONFIG.hoverDocs[word.word]) {
+          return {
+            range: new monacoInstance.Range(
+              position.lineNumber,
+              word.startColumn,
+              position.lineNumber,
+              word.endColumn
+            ),
+            contents: [
+              { value: `**${word.word}**` },
+              { value: MONACO_CONFIG.hoverDocs[word.word] }
+            ]
+          };
+        }
+      }
+    });
+
+    try {
+      // Initialize auto-typings for additional npm packages
+      await AutoTypings.create(editor, {
+        sourceCache: new LocalStorageCache(),
+        monaco: monacoInstance,
+        ...MONACO_CONFIG.autoTypingsConfig,
+      });
+    } catch (error) {
+      console.warn("Failed to initialize auto-typings:", error);
+    }
   }
 
   return (
@@ -52,16 +131,8 @@ export function MonacoEditor({ initialCode = "" }) {
           value={code || initialCode}
           onChange={handleEditorChange}
           onMount={handleEditorDidMount}
-          theme="vs-light"
-          options={{
-            minimap: { enabled: false },
-            scrollBeyondLastLine: false,
-            wordWrap: "on",
-            fontSize: 14,
-            lineNumbers: "on",
-            roundedSelection: false,
-            automaticLayout: true,
-          }}
+          theme={MONACO_CONFIG.editorOptions.theme}
+          options={MONACO_CONFIG.editorOptions}
         />
       </div>
       <div className="visualization-container">
