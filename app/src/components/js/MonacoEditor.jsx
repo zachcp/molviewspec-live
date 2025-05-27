@@ -17,7 +17,7 @@ export function MonacoEditor({ initialCode = "" }) {
     if (initialCode && !code) {
       setCode(initialCode);
     }
-    
+
     // Initialize and check if molstar is available
     initializeMolstar().then(() => {
       setInitialized(true);
@@ -48,12 +48,11 @@ export function MonacoEditor({ initialCode = "" }) {
     <div className="app-container">
       <div className="editor-container">
         <Editor
-          height="400px"
           defaultLanguage="javascript"
           value={code || initialCode}
           onChange={handleEditorChange}
           onMount={handleEditorDidMount}
-          theme="vs-dark"
+          theme="vs-light"
           options={{
             minimap: { enabled: false },
             scrollBeyondLastLine: false,
