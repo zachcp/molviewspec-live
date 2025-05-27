@@ -23,14 +23,21 @@ export function viteStaticCopyPyodide() {
 }
 
 export default defineConfig({
-  optimizeDeps: { exclude: ["pyodide", "molstar"] },
+  optimizeDeps: { 
+    exclude: ["pyodide", "molstar"],
+    include: ["monaco-editor/esm/vs/language/typescript/ts.worker", "monaco-editor/esm/vs/editor/editor.worker"]
+  },
   plugins: [viteStaticCopyPyodide()],
+  worker: {
+    format: "es"
+  },
   define: {
     // Add this section to provide a process.env shim
     "process.env": {},
     "process.env.NODE_ENV": JSON.stringify(
       process.env.NODE_ENV || "production",
     ),
+    global: "globalThis",
   },
   build: {
     lib: {
