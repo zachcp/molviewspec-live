@@ -117,7 +117,7 @@ h1 {
     font-weight: bold;
 }
 
-#python-container, #js-container {
+#python-container, #js-container, #monaco-container {
     border: 1px solid #ddd;
     border-radius: 0 4px 4px 4px;
     padding: 20px;

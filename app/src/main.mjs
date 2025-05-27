@@ -6,6 +6,7 @@ import { PythonMolViewSpecApp } from "./components/python/atomScope.jsx";
 import { JSMolViewSpecApp } from "./components/js/atomScope.jsx";
 import { CodeMirrorEditor as PythonEditor } from "./components/python/CodeMirrorEditor.jsx";
 import { CodeMirrorEditor as JSEditor } from "./components/js/CodeMirrorEditor.jsx";
+import { MonacoEditor as JSMonacoEditor } from "./components/js/MonacoEditor.jsx";
 import { MolStar } from "./components/common/MolStar.jsx";
 
 // Create a React context in a separate file to avoid JSX in .mjs
@@ -43,11 +44,12 @@ export function useAtomScope() {
 
 // Re-export common components for backward compatibility
 export { PythonEditor as CodeMirrorEditor };
+export { JSMonacoEditor as MonacoEditor };
 export { MolStar };
 export { PythonMolViewSpecApp as MolViewSpecApp };
 
 // Main application initialization function
-export function appInit(container, initialState, initialCode, mode = "python") {
+export function appInit(container, initialState, initialCode, mode = "python", editorType = "codemirror") {
   if (!container) return;
 
   const root = createRoot(container);
@@ -65,6 +67,7 @@ export function appInit(container, initialState, initialCode, mode = "python") {
       ),
     );
   } else if (mode === "js") {
+    const Editor = editorType === "monaco" ? JSMonacoEditor : JSEditor;
     root.render(
       createElement(
         ImplementationProvider,
@@ -72,7 +75,7 @@ export function appInit(container, initialState, initialCode, mode = "python") {
         createElement(
           JSMolViewSpecApp,
           { initialCode: initialCode },
-          createElement(JSEditor, { initialCode: initialCode }),
+          createElement(Editor, { initialCode: initialCode }),
         ),
       ),
     );

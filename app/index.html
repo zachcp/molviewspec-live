@@ -20,7 +20,8 @@
             <p>Choose an implementation to use:</p>
             <div class="language-tabs">
                 <div class="language-tab active" id="python-tab">Python</div>
-                <div class="language-tab" id="js-tab">JavaScript</div>
+                <div class="language-tab" id="js-tab">JavaScript (CodeMirror)</div>
+                <div class="language-tab" id="monaco-tab">JavaScript (Monaco)</div>
             </div>
             
             <div id="python-container">
@@ -30,6 +31,10 @@
             <div id="js-container" style="display: none;">
                 <div id="app_js"></div>
             </div>
+            
+            <div id="monaco-container" style="display: none;">
+                <div id="app_monaco"></div>
+            </div>
         </div>
         
         <script type="module">
@@ -37,12 +42,15 @@
             
             const pythonTab = document.getElementById('python-tab');
             const jsTab = document.getElementById('js-tab');
+            const monacoTab = document.getElementById('monaco-tab');
             const pythonContainer = document.getElementById('python-container');
             const jsContainer = document.getElementById('js-container');
+            const monacoContainer = document.getElementById('monaco-container');
             
-            // Initialize both apps
+            // Initialize apps
             const app_div = document.querySelector("#app");
             const app_js_div = document.querySelector("#app_js");
+            const app_monaco_div = document.querySelector("#app_monaco");
             
             // Python example
             const init_code = `from molviewspec import create_builder
@@ -90,27 +98,47 @@ const mvsData = builder.getState();
             // Initialize Python app
             appInit(app_div, null, init_code, "python");
             
-            // Initialize JS app (deferred)
+            // Initialize JS and Monaco apps (deferred)
             let jsInitialized = false;
+            let monacoInitialized = false;
             
             // Tab switching
             pythonTab.addEventListener('click', () => {
                 pythonTab.classList.add('active');
                 jsTab.classList.remove('active');
+                monacoTab.classList.remove('active');
                 pythonContainer.style.display = 'block';
                 jsContainer.style.display = 'none';
+                monacoContainer.style.display = 'none';
             });
             
             jsTab.addEventListener('click', () => {
                 jsTab.classList.add('active');
                 pythonTab.classList.remove('active');
+                monacoTab.classList.remove('active');
                 jsContainer.style.display = 'block';
                 pythonContainer.style.display = 'none';
+                monacoContainer.style.display = 'none';
                 
                 // Initialize JS app if not already done
                 if (!jsInitialized) {
                     appInit(app_js_div, null, init_js_code, "js");
                     jsInitialized = true;
+                }
+            });
+            
+            monacoTab.addEventListener('click', () => {
+                monacoTab.classList.add('active');
+                pythonTab.classList.remove('active');
+                jsTab.classList.remove('active');
+                monacoContainer.style.display = 'block';
+                pythonContainer.style.display = 'none';
+                jsContainer.style.display = 'none';
+                
+                // Initialize Monaco app if not already done
+                if (!monacoInitialized) {
+                    appInit(app_monaco_div, null, init_js_code, "js", "monaco");
+                    monacoInitialized = true;
                 }
             });
         </script>
